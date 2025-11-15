@@ -102,20 +102,70 @@ const Header: React.FC<HeaderProps> = ({ cartItems, updateCartItem, removeFromCa
               whileHover={{ scale: 1.05 }}
             >
               <motion.div
-                className="h-16 md:h-20 relative"
+                className="h-20 md:h-24 relative"
                 animate={{
                   filter: [
-                    'drop-shadow(0 0 10px rgba(212, 175, 55, 0.3))',
-                    'drop-shadow(0 0 20px rgba(212, 175, 55, 0.6))',
-                    'drop-shadow(0 0 10px rgba(212, 175, 55, 0.3))'
-                  ]
+                    'drop-shadow(0 0 15px rgba(212, 175, 55, 0.4))',
+                    'drop-shadow(0 0 30px rgba(212, 175, 55, 0.7))',
+                    'drop-shadow(0 0 15px rgba(212, 175, 55, 0.4))'
+                  ],
+                  rotateY: [0, 5, 0, -5, 0],
                 }}
-                transition={{ duration: 3, repeat: Infinity }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                style={{
+                  perspective: '1000px',
+                  transformStyle: 'preserve-3d',
+                }}
               >
-                <img
-                  src="/WhatsApp Image 2025-11-13 at 21.48.50_4108e64c.jpg"
+                <motion.img
+                  src="/WhatsApp Image 2025-11-13 at 21.48.50_15c79407-Photoroom.png"
                   alt="DAY Time & Vision"
                   className="h-full w-auto object-contain"
+                  animate={{
+                    rotateX: [0, 2, 0, -2, 0],
+                    scale: [1, 1.02, 1, 1.02, 1],
+                  }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  style={{
+                    filter: 'brightness(1.1) contrast(1.1)',
+                  }}
+                />
+
+                {/* 3D Floating Particles around logo */}
+                <motion.div
+                  className="absolute -top-2 -right-2 w-2 h-2 bg-luxury-gold rounded-full"
+                  animate={{
+                    y: [0, -10, 0],
+                    opacity: [0.5, 1, 0.5],
+                    scale: [1, 1.5, 1],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+                <motion.div
+                  className="absolute -bottom-2 -left-2 w-2 h-2 bg-luxury-gold rounded-full"
+                  animate={{
+                    y: [0, 10, 0],
+                    opacity: [0.5, 1, 0.5],
+                    scale: [1, 1.5, 1],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 1
+                  }}
                 />
               </motion.div>
             </motion.div>
