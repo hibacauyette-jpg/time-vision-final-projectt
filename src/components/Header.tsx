@@ -44,7 +44,11 @@ const Header: React.FC<HeaderProps> = ({ cartItems, updateCartItem, removeFromCa
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cartItems.reduce((sum, item) => {
-    const price = parseFloat(item.price.replace(/[^\d,]/g, '').replace(',', '.'));
+    // Handle US format: "12,500.00 DH" → remove "DH" and comma (thousands), keep the number
+    const cleanPrice = item.price
+      .replace(/\s*DH\s*/g, '') // Remove DH
+      .replace(/,/g, '');         // Remove commas (thousands separator)
+    const price = parseFloat(cleanPrice);
     return sum + (price * item.quantity);
   }, 0);
 
@@ -84,24 +88,11 @@ const Header: React.FC<HeaderProps> = ({ cartItems, updateCartItem, removeFromCa
               className="flex items-center space-x-3"
               whileHover={{ scale: 1.05 }}
             >
-              <motion.div 
-                className="w-12 h-12 bg-gradient-to-br from-luxury-gold to-luxury-darkGold rounded-lg flex items-center justify-center shadow-lg relative overflow-hidden"
-                animate={{ 
-                  boxShadow: [
-                    '0 0 20px rgba(212, 175, 55, 0.3)',
-                    '0 0 30px rgba(212, 175, 55, 0.6)',
-                    '0 0 20px rgba(212, 175, 55, 0.3)'
-                  ]
-                }}
-                transition={{ duration: 3, repeat: Infinity }}
-              >
-                <span className="text-white font-bold text-xl relative z-10">T&V</span>
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                  animate={{ x: ['-100%', '100%'] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                />
-              </motion.div>
+              <img
+                src="/daylogo.png"
+                alt="Time & Vision logo"
+                className="w-40 h-40 object-contain -ml-24"
+              />
               <div className="hidden md:block">
                 <h1 className="text-2xl font-playfair font-bold text-white">
                   Time & Vision

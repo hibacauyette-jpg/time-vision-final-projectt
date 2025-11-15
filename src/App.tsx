@@ -81,7 +81,11 @@ function App() {
   };
 
   const totalAmount = cartItems.reduce((sum, item) => {
-    const price = parseFloat(item.price.replace(/[^\d,]/g, '').replace(',', '.'));
+    // Handle US format: "12,500.00 DH" → remove "DH" and comma (thousands), keep the number
+    const cleanPrice = item.price
+      .replace(/\s*DH\s*/g, '') // Remove DH
+      .replace(/,/g, '');         // Remove commas (thousands separator)
+    const price = parseFloat(cleanPrice);
     return sum + (price * item.quantity);
   }, 0);
 
