@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import PaymentModal from './components/PaymentModal';
 import PrivacyModal from './components/PrivacyModal';
 import Chatbot from './components/Chatbot';
+import ThemeToggle from './components/ThemeToggle';
 
 interface CartItem {
   id: number;
@@ -34,7 +35,30 @@ function App() {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [privacyModalType, setPrivacyModalType] = useState<'privacy' | 'terms'>('privacy');
-  const [isChatOpen, setIsChatOpen] = useState(false); // <-- Added for chatbot toggle
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    try {
+      const saved = localStorage.getItem('daly-theme');
+      if (saved === 'dark') return 'dark';
+      if (saved === 'light') return 'light';
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    } catch {
+      return 'light';
+    }
+  });
+
+  // Apply theme to document
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+      localStorage.setItem('daly-theme', 'dark');
+    } else {
+      root.classList.remove('dark');
+      localStorage.setItem('daly-theme', 'light');
+    }
+  }, [theme]);
 
   const addToCart = (product: Product) => {
     setCartItems(prevItems => {
@@ -46,36 +70,19 @@ function App() {
             : item
         );
       } else {
-        return [...prevItems, {
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          image: product.image,
-          quantity: 1,
-        }];
+        return [...prevItems, { id: product.id, name: product.name, price: product.price, image: product.image, quantity: 1 }];
       }
     });
   };
 
   const updateCartItem = (id: number, quantity: number) => {
-    if (quantity === 0) {
-      removeFromCart(id);
-    } else {
-      setCartItems(prevItems =>
-        prevItems.map(item =>
-          item.id === id ? { ...item, quantity } : item
-        )
-      );
-    }
+    if (quantity === 0) removeFromCart(id);
+    else setCartItems(prevItems => prevItems.map(item => item.id === id ? { ...item, quantity } : item));
   };
 
-  const removeFromCart = (id: number) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
-  };
+  const removeFromCart = (id: number) => setCartItems(prevItems => prevItems.filter(item => item.id !== id));
 
-  const handleCheckout = () => {
-    setIsPaymentModalOpen(true);
-  };
+  const handleCheckout = () => setIsPaymentModalOpen(true);
 
   const handlePaymentComplete = () => {
     setCartItems([]);
@@ -83,11 +90,8 @@ function App() {
   };
 
   const totalAmount = cartItems.reduce((sum, item) => {
-    const cleanPrice = item.price
-      .replace(/\s*DH\s*/g, '') 
-      .replace(/,/g, '');         
-    const price = parseFloat(cleanPrice);
-    return sum + (price * item.quantity);
+    const cleanPrice = item.price.replace(/\s*DH\s*/g, '').replace(/,/g, '');
+    return sum + parseFloat(cleanPrice) * item.quantity;
   }, 0);
 
   const openPrivacyModal = (type: 'privacy' | 'terms') => {
@@ -95,7 +99,7 @@ function App() {
     setIsPrivacyModalOpen(true);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleFooterClick = (e: Event) => {
       const target = e.target as HTMLElement;
       if (target.textContent === 'Politique de Confidentialité') {
@@ -106,7 +110,6 @@ function App() {
         openPrivacyModal('terms');
       }
     };
-
     document.addEventListener('click', handleFooterClick);
     return () => document.removeEventListener('click', handleFooterClick);
   }, []);
@@ -116,7 +119,7 @@ function App() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="min-h-screen bg-luxury-obsidian relative"
+      className={`min-h-screen relative bg-white dark:bg-luxury-obsidian text-black dark:text-white`}
     >
       <Header 
         cartItems={cartItems}
@@ -124,6 +127,7 @@ function App() {
         removeFromCart={removeFromCart}
         onCheckout={handleCheckout}
       />
+
       <main>
         <Hero />
         <ProductShowcase onAddToCart={addToCart} />
@@ -131,8 +135,9 @@ function App() {
         <AboutSection />
         <ContactSection />
       </main>
+
       <Footer />
-      
+
       <PaymentModal
         isOpen={isPaymentModalOpen}
         onClose={() => setIsPaymentModalOpen(false)}
@@ -146,19 +151,24 @@ function App() {
         type={privacyModalType}
       />
 
-      {/* ---- Normal Floating Chatbot Button ---- */}
-<button
-  onClick={() => setIsChatOpen(true)}
-  className="fixed bottom-6 right-6 w-16 h-16 rounded-full bg-gradient-to-tr from-primary-500 via-accent-500 to-secondary-500 shadow-lg shadow-primary-500/50 flex items-center justify-center animate-float-glow z-50 hover:scale-110 active:scale-95 transition-transform duration-300"
->
-  <span className="text-white font-bold text-xl">💬</span>
-</button>
+      {/* Floating Chatbot Button */}
+      <button
+        onClick={() => setIsChatOpen(true)}
+        className="fixed bottom-6 right-6 w-16 h-16 rounded-full bg-gradient-to-tr from-primary-500 via-accent-500 to-secondary-500 shadow-lg shadow-primary-500/50 flex items-center justify-center animate-float-glow z-50 hover:scale-110 active:scale-95 transition-transform duration-300"
+      >
+        <span className="text-white font-bold text-xl">💬</span>
+      </button>
 
-
-      {/* Chatbot Component */}
+      {/* Chatbot */}
       <Chatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+
+      {/* Floating Theme Toggle */}
+      <div className="fixed bottom-6 left-6 z-50">
+        <ThemeToggle theme={theme} setTheme={setTheme} />
+      </div>
     </motion.div>
   );
 }
 
 export default App;
+
