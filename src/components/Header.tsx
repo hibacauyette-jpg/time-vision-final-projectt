@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ShoppingBag, Search, User, Phone, Minus, Plus, Trash2, LogIn, Sparkles, Eye, LogOut } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
+import { Menu, X, ShoppingBag, Search, User, Phone, Minus, Plus, Trash2, LogIn, Sparkles, Eye } from 'lucide-react';
 
 interface CartItem {
   id: number;
@@ -19,7 +18,6 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ cartItems, updateCartItem, removeFromCart, onCheckout }) => {
-  const { user, signInWithGoogle, signOut } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -46,16 +44,11 @@ const Header: React.FC<HeaderProps> = ({ cartItems, updateCartItem, removeFromCa
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cartItems.reduce((sum, item) => {
-<<<<<<< HEAD
     // Handle US format: "12,500.00 DH" → remove "DH" and comma (thousands), keep the number
     const cleanPrice = item.price
       .replace(/\s*DH\s*/g, '') // Remove DH
       .replace(/,/g, '');         // Remove commas (thousands separator)
     const price = parseFloat(cleanPrice);
-=======
-    const priceStr = item.price.replace(/\s/g, '').replace(',', '.');
-    const price = parseFloat(priceStr);
->>>>>>> 28f2844a5b36c21eb7eca9f9fd5480936a55d6e0
     return sum + (price * item.quantity);
   }, 0);
 
@@ -71,23 +64,9 @@ const Header: React.FC<HeaderProps> = ({ cartItems, updateCartItem, removeFromCa
     }
   };
 
-  const handleLogin = async (provider: string) => {
-    try {
-      if (provider === 'google') {
-        await signInWithGoogle();
-      }
-      setIsLoginOpen(false);
-    } catch (error) {
-      console.error('Login error:', error);
-    }
-  };
-
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-    } catch (error) {
-      console.error('Sign out error:', error);
-    }
+  const handleLogin = (provider: string) => {
+    console.log(`Logging in with ${provider}`);
+    setIsLoginOpen(false);
   };
 
   return (
@@ -105,11 +84,10 @@ const Header: React.FC<HeaderProps> = ({ cartItems, updateCartItem, removeFromCa
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <motion.div
+            <motion.div 
               className="flex items-center space-x-3"
               whileHover={{ scale: 1.05 }}
             >
-<<<<<<< HEAD
               <img
                 src="/daylogo.png"
                 alt="Time & Vision logo"
@@ -123,75 +101,6 @@ const Header: React.FC<HeaderProps> = ({ cartItems, updateCartItem, removeFromCa
                   Montres et Lunettes
                 </p>
               </div>
-=======
-              <motion.div
-                className="h-20 md:h-24 relative"
-                animate={{
-                  filter: [
-                    'drop-shadow(0 0 15px rgba(212, 175, 55, 0.4))',
-                    'drop-shadow(0 0 30px rgba(212, 175, 55, 0.7))',
-                    'drop-shadow(0 0 15px rgba(212, 175, 55, 0.4))'
-                  ],
-                  rotateY: [0, 5, 0, -5, 0],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                style={{
-                  perspective: '1000px',
-                  transformStyle: 'preserve-3d',
-                }}
-              >
-                <motion.img
-                  src="/WhatsApp Image 2025-11-13 at 21.48.50_15c79407-Photoroom.png"
-                  alt="DAY Time & Vision"
-                  className="h-full w-auto object-contain"
-                  animate={{
-                    rotateX: [0, 2, 0, -2, 0],
-                    scale: [1, 1.02, 1, 1.02, 1],
-                  }}
-                  transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                  style={{
-                    filter: 'brightness(1.1) contrast(1.1)',
-                  }}
-                />
-
-                {/* 3D Floating Particles around logo */}
-                <motion.div
-                  className="absolute -top-2 -right-2 w-2 h-2 bg-luxury-gold rounded-full"
-                  animate={{
-                    y: [0, -10, 0],
-                    opacity: [0.5, 1, 0.5],
-                    scale: [1, 1.5, 1],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                />
-                <motion.div
-                  className="absolute -bottom-2 -left-2 w-2 h-2 bg-luxury-gold rounded-full"
-                  animate={{
-                    y: [0, 10, 0],
-                    opacity: [0.5, 1, 0.5],
-                    scale: [1, 1.5, 1],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 1
-                  }}
-                />
-              </motion.div>
->>>>>>> 28f2844a5b36c21eb7eca9f9fd5480936a55d6e0
             </motion.div>
 
             {/* Navigation Desktop */}
@@ -228,41 +137,19 @@ const Header: React.FC<HeaderProps> = ({ cartItems, updateCartItem, removeFromCa
                 />
               </motion.button>
               
-              {user ? (
-                <div className="hidden lg:flex items-center space-x-3">
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="text-white"
-                  >
-                    <p className="text-sm text-luxury-gold font-medium">Bienvenue</p>
-                    <p className="text-sm font-semibold">{user.user_metadata?.full_name || user.email?.split('@')[0]}</p>
-                  </motion.div>
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={handleSignOut}
-                    className="p-2 text-white hover:text-luxury-gold transition-colors duration-300 relative"
-                    title="Se déconnecter"
-                  >
-                    <LogOut size={20} />
-                  </motion.button>
-                </div>
-              ) : (
-                <motion.button
-                  whileHover={{ scale: 1.1, rotate: -5 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-2 text-white hover:text-luxury-gold transition-colors duration-300 relative"
-                  onClick={() => setIsLoginOpen(true)}
-                >
-                  <User size={20} />
-                  <motion.div
-                    className="absolute inset-0 rounded-full border border-luxury-gold/30"
-                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-                  />
-                </motion.button>
-              )}
+              <motion.button
+                whileHover={{ scale: 1.1, rotate: -5 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2 text-white hover:text-luxury-gold transition-colors duration-300 relative"
+                onClick={() => setIsLoginOpen(true)}
+              >
+                <User size={20} />
+                <motion.div
+                  className="absolute inset-0 rounded-full border border-luxury-gold/30"
+                  animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                />
+              </motion.button>
               
               {/* Cart Button */}
               <motion.button
@@ -327,25 +214,6 @@ const Header: React.FC<HeaderProps> = ({ cartItems, updateCartItem, removeFromCa
               className="lg:hidden bg-luxury-obsidian/95 backdrop-blur-md border-t border-luxury-gold/20 overflow-hidden"
             >
               <div className="px-4 py-6 space-y-4">
-                {user && (
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="bg-luxury-gold/10 border border-luxury-gold/30 rounded-xl p-4 mb-4"
-                  >
-                    <p className="text-luxury-gold font-medium text-sm mb-1">Bienvenue</p>
-                    <p className="text-white font-semibold">{user.user_metadata?.full_name || user.email?.split('@')[0]}</p>
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={handleSignOut}
-                      className="mt-3 flex items-center space-x-2 text-white hover:text-luxury-gold transition-colors text-sm"
-                    >
-                      <LogOut size={16} />
-                      <span>Se déconnecter</span>
-                    </motion.button>
-                  </motion.div>
-                )}
                 {menuItems.map((item, index) => (
                   <motion.a
                     key={item.name}
@@ -369,20 +237,6 @@ const Header: React.FC<HeaderProps> = ({ cartItems, updateCartItem, removeFromCa
                   <Phone size={16} />
                   <span className="text-sm">+212 771-948034</span>
                 </motion.a>
-                {!user && (
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => setIsLoginOpen(true)}
-                    className="flex items-center space-x-2 bg-luxury-gold/10 border border-luxury-gold/30 text-luxury-gold px-4 py-3 rounded-full hover:bg-luxury-gold hover:text-luxury-obsidian transition-colors duration-300 w-fit font-semibold"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.7 }}
-                  >
-                    <User size={16} />
-                    <span className="text-sm">Se connecter</span>
-                  </motion.button>
-                )}
               </div>
             </motion.div>
           )}
