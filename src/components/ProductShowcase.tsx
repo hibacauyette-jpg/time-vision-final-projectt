@@ -114,7 +114,7 @@ const products: Product[] = [
     id: 12,
     name: 'Lunettes Polarisées',
     price: '5200.00',
-    image: '/public/s7.jpg',
+    image: '/s7.jpg',
     category: 'lunette',
     rating: 4.9,
   },

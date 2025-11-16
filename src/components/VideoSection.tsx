@@ -16,10 +16,10 @@ const VideoSection: React.FC = () => {
       src: '/video1.mp4',
       title: 'L\'Art de l\'Horlogerie Suisse',
       description: 'Découvrez les secrets de fabrication des montres de luxe',
-      thumbnail: 'https://images.pexels.com/photos/364822/pexels-photo-364822.jpeg?auto=compress&cs=tinysrgb&w=600'
+      thumbnail: 'https://www.sosh.fr/nouveautes/apple/watch-montre-connectee/img/watch-ultra-3.jpg'
     },
     {
-      src: '/video2.mp4',
+      src: '/video55.mp4',
       title: 'Excellence Optique',
       description: 'L\'artisanat derrière nos lunettes de prestige',
       thumbnail: 'https://images.pexels.com/photos/701877/pexels-photo-701877.jpeg?auto=compress&cs=tinysrgb&w=600'
