@@ -13,13 +13,13 @@ const team = [
     name: 'Douaa',
     role: 'Développeur',
     description: 'Experte en développement et optimisation technique',
-    image: '/public/douaa.jpg',
+    image: '/douaa.jpg',
   },
   {
     name: 'Yasser',
     role: 'Développeur',
     description: 'Spécialiste en architecture logicielle et performance',
-    image: '/public/yasser.jpg',
+    image: '/yasser.jpg',
   },
 ];
 
