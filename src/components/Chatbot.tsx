@@ -34,7 +34,7 @@ function getBotResponse(userMessage: string): string {
   }
 
   if (message.includes('bonjour') || message.includes('salut') || message.includes('coucou')) {
-    return "Bonjour ! Bienvenue chez DALY. Je suis votre assistant. Comment puis-je vous aider ?";
+    return "Bonjour ! Bienvenue chez DAY. Je suis votre assistant. Comment puis-je vous aider ?";
   }
 
   if (message.includes('aide')) {

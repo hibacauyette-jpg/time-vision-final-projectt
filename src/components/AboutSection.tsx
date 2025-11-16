@@ -13,13 +13,13 @@ const team = [
     name: 'Douaa',
     role: 'Développeur',
     description: 'Experte en développement et optimisation technique',
-    image: 'https://images.pexels.com/photos/1181424/pexels-photo-1181424.jpeg?auto=compress&cs=tinysrgb&w=400',
+    image: '/public/douaa.jpg',
   },
   {
     name: 'Yasser',
     role: 'Développeur',
     description: 'Spécialiste en architecture logicielle et performance',
-    image: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=400',
+    image: '/public/yasser.jpg',
   },
 ];
 
