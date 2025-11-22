@@ -7,7 +7,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 console.log('VITE_SUPABASE_URL:', supabaseUrl ? '[set]' : '[missing]');
 console.log('VITE_SUPABASE_ANON_KEY:', supabaseAnonKey ? '[set]' : '[missing]');
 
-let supabaseClient: any = null;
+let supabaseClient: ReturnType<typeof import('@supabase/supabase-js').createClient> | null = null;
 
 if (!supabaseUrl || !supabaseAnonKey) {
   // Do not throw in dev — provide a minimal stub to avoid crashing the app.
@@ -18,9 +18,12 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
   supabaseClient = {
     auth: {
+      getSession: async () => ({ data: { session: null }, error: null }),
       signIn: async () => ({ data: null, error: new Error('Supabase not configured') }),
       signOut: async () => ({ error: new Error('Supabase not configured') }),
       user: () => null,
+      onAuthStateChange: () => ({ subscription: { unsubscribe: () => {} } }),
+      signInWithOAuth: async () => ({ error: new Error('Supabase not configured') }),
     },
     from: (_table: string) => ({
       select: async () => ({ data: null, error: new Error('Supabase not configured') }),
@@ -28,7 +31,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
       update: async () => ({ data: null, error: new Error('Supabase not configured') }),
       delete: async () => ({ data: null, error: new Error('Supabase not configured') }),
     }),
-  } as any;
+  };
 } else {
   supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
 }
